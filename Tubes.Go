@@ -204,9 +204,10 @@ func selectionSortPenghasilan(ascending bool) {
 	var i int = 0
 	var minIdx int
 	var temp IncomeSource
-	var j int = i + 1
+	var j int
 	for i < n-1 {
 		minIdx = i
+		j = i + 1
 		for j < n {
 			if (ascending && sumber[j].Penghasilan < sumber[minIdx].Penghasilan) || (!ascending && sumber[j].Penghasilan > sumber[minIdx].Penghasilan) {
 				minIdx = j
