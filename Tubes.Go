@@ -27,18 +27,36 @@ var daftarKategori = []string{
 }
 
 func tampilKategori() {
-	for i := 0; i < len(daftarKategori); i++ {
+	var i int
+	for i = 0; i < len(daftarKategori); i++ {
 		fmt.Printf("%d. %s\n", i+1, daftarKategori[i])
 	}
 }
 
 func kategoriValid(input string) bool {
-	for i := 0; i < len(daftarKategori); i++ {
+	var i int
+	for i = 0; i < len(daftarKategori); i++ {
 		if input == daftarKategori[i] {
 			return true
 		}
 	}
 	return false
+}
+
+func tampilkanData() {
+	var laba float64
+	fmt.Println("\n================================= Daftar Penghasilan =================================")
+	var i int = 0
+	for i < n {
+		laba = sumber[i].Penghasilan - sumber[i].BiayaOperasional
+		fmt.Printf("[%d] %s \t | %s \t | Rp%.2f \t | Laba: Rp%.2f\t\n", i, sumber[i].Nama, sumber[i].Kategori, sumber[i].Penghasilan, laba)
+		i++
+	}
+	// Jika tidak ada data
+	if n == 0 {
+		fmt.Println("		 	  ❌ Tidak ada data yang tersedia.")
+	}
+	fmt.Println("=======================================================================================\n")
 }
 
 func tambahData() {
@@ -70,21 +88,6 @@ func tambahData() {
 	} else {
 		fmt.Println("❌ Kapasitas penuh.")
 	}
-}
-
-func tampilkanData() {
-	fmt.Println("\n================================= Daftar Penghasilan =================================")
-	var i int = 0
-	for i < n {
-		laba := sumber[i].Penghasilan - sumber[i].BiayaOperasional
-		fmt.Printf("[%d] %s \t | %s \t | Rp%.2f \t | Laba: Rp%.2f\t\n", i, sumber[i].Nama, sumber[i].Kategori, sumber[i].Penghasilan, laba)
-		i++
-	}
-	// Jika tidak ada data
-	if n == 0 {
-		fmt.Println("		 	  ❌ Tidak ada data yang tersedia.")
-	}
-	fmt.Println("=======================================================================================\n")
 }
 
 func ubahData() {
@@ -171,22 +174,6 @@ func sequentialSearch(kategori string) {
 	}
 }
 
-func insertionSortKategori(ascending bool) {
-	var i int = 1
-	var j int
-	var key IncomeSource
-	for i < n {
-		key = sumber[i]
-		j = i - 1
-		for j >= 0 && ((ascending && sumber[j].Kategori > key.Kategori) || (!ascending && sumber[j].Kategori < key.Kategori)) {
-			sumber[j+1] = sumber[j]
-			j--
-		}
-		sumber[j+1] = key
-		i++
-	}
-}
-
 func binarySearch(kategori string) {
 	insertionSortKategori(true)
 	var mid int
@@ -229,6 +216,22 @@ func selectionSortPenghasilan(ascending bool) {
 		temp = sumber[i]
 		sumber[i] = sumber[minIdx]
 		sumber[minIdx] = temp
+		i++
+	}
+}
+
+func insertionSortKategori(ascending bool) {
+	var i int = 1
+	var j int
+	var key IncomeSource
+	for i < n {
+		key = sumber[i]
+		j = i - 1
+		for j >= 0 && ((ascending && sumber[j].Kategori > key.Kategori) || (!ascending && sumber[j].Kategori < key.Kategori)) {
+			sumber[j+1] = sumber[j]
+			j--
+		}
+		sumber[j+1] = key
 		i++
 	}
 }
