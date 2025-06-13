@@ -1,100 +1,313 @@
 package main
+
 import "fmt"
 
-func tampilkanData() {
-    fmt.Println("👋 Keluar.")
-    return
+func main() {
+	fmt.Println("\nSelamat datang di Aplikasi Manajemen Penghasilan	!")
+	menu()
+}
+
+type IncomeSource struct {
+	Nama             string
+	Kategori         string
+	Penghasilan      float64
+	BiayaOperasional float64
+}
+
+const Maks = 1000
+
+var sumber [Maks]IncomeSource
+var n int // jumlah data
+
+var daftarKategori = []string{
+	"Pekerjaan Sampingan",
+	"Freelancing",
+	"Bisnis Digital",
+	"Investasi Pasif",
+}
+
+func tampilKategori() {
+	for i := 0; i < len(daftarKategori); i++ {
+		fmt.Printf("%d. %s\n", i+1, daftarKategori[i])
+	}
+}
+
+func kategoriValid(input string) bool {
+	for i := 0; i < len(daftarKategori); i++ {
+		if input == daftarKategori[i] {
+			return true
+		}
+	}
+	return false
 }
 
 func tambahData() {
-    fmt.Println("👋 Keluar.")
-    return
+	if n < Maks {
+		var nama string
+		var penghasilan, biaya float64
+		var pilih int
+
+		fmt.Print("\nNama sumber: ")
+		fmt.Scanln(&nama)
+
+		fmt.Println("Pilih kategori:")
+		tampilKategori()
+		fmt.Print("Masukkan nomor kategori: ")
+		fmt.Scanln(&pilih)
+		if pilih >= 1 && pilih <= len(daftarKategori) {
+			fmt.Print("Penghasilan: ")
+			fmt.Scanln(&penghasilan)
+			fmt.Print("Biaya operasional: ")
+			fmt.Scanln(&biaya)
+			sumber[n] = IncomeSource{nama, daftarKategori[pilih-1], penghasilan, biaya}
+			n++
+			fmt.Println("✅ Data berhasil ditambahkan.")
+		} else {
+			fmt.Println("❌ Pilihan kategori tidak valid.\n")
+			fmt.Println("Silakan pilih kategori yang valid dari daftar berikut:")
+			tampilKategori()
+		}
+	} else {
+		fmt.Println("❌ Kapasitas penuh.")
+	}
+}
+
+func tampilkanData() {
+	fmt.Println("\n================================= Daftar Penghasilan =================================")
+	var i int = 0
+	for i < n {
+		laba := sumber[i].Penghasilan - sumber[i].BiayaOperasional
+		fmt.Printf("[%d] %s \t | %s \t | Rp%.2f \t | Laba: Rp%.2f\t\n", i, sumber[i].Nama, sumber[i].Kategori, sumber[i].Penghasilan, laba)
+		i++
+	}
+	// Jika tidak ada data
+	if n == 0 {
+		fmt.Println("		 	  ❌ Tidak ada data yang tersedia.")
+	}
+	fmt.Println("=======================================================================================\n")
 }
 
 func ubahData() {
-    fmt.Println("👋 Keluar.")
-    return
+	tampilkanData()
+	var index int
+	fmt.Print("Masukkan indeks data yang ingin diubah: ")
+	fmt.Scanln(&index)
+	if index >= 0 && index < n {
+		var nama string
+		var penghasilan, biaya float64
+		var pilih int
+		fmt.Print("Nama sumber baru: ")
+		fmt.Scanln(&nama)
+		fmt.Println("Pilih kategori baru:")
+		tampilKategori()
+		fmt.Print("Masukkan nomor kategori: ")
+		fmt.Scanln(&pilih)
+		if pilih >= 1 && pilih <= len(daftarKategori) {
+			fmt.Print("Penghasilan baru: ")
+			fmt.Scanln(&penghasilan)
+			fmt.Print("Biaya operasional baru: ")
+			fmt.Scanln(&biaya)
+			sumber[index] = IncomeSource{nama, daftarKategori[pilih-1], penghasilan, biaya}
+			fmt.Println("✅ Data berhasil diubah.")
+		} else {
+			fmt.Println("❌ Kategori tidak valid.\n")
+		}
+
+	} else {
+		fmt.Println("❌ Indeks tidak valid.")
+	}
 }
 
 func hapusData() {
-    fmt.Println("👋 Keluar.")
-    return
+	tampilkanData()
+	var index int
+	fmt.Print("Masukkan indeks data yang ingin dihapus: ")
+	fmt.Scanln(&index)
+	if index >= 0 && index < n {
+		var i int = index
+		for i < n-1 {
+			sumber[i] = sumber[i+1]
+			i++
+		}
+		n = n - 1
+		fmt.Println("✅ Data berhasil dihapus.")
+	} else {
+		fmt.Println("❌ Indeks tidak valid.\n")
+	}
 }
 
 func laporanBulanan() {
-    fmt.Println("👋 Keluar.")
-    return
+	var total, laba float64
+	var i int = 0
+	for i < n {
+		total = total + sumber[i].Penghasilan
+		laba = laba + (sumber[i].Penghasilan - sumber[i].BiayaOperasional)
+		i++
+	}
+	fmt.Println("\n=== Laporan Bulanan ===")
+	fmt.Printf("Total Penghasilan: Rp%.2f\n", total)
+	fmt.Printf("Total Laba: Rp%.2f\n", laba)
+	if laba < 0.3*total {
+		fmt.Println("Rekomendasi: Kurangi biaya operasional.")
+	} else {
+		fmt.Println("Rekomendasi: Laba sehat, pertahankan atau cari peluang baru.")
+	}
 }
 
 func sequentialSearch(kategori string) {
-    fmt.Println("👋 Keluar.")
-    return
+	fmt.Println("\nHasil Pencarian (Sequential):")
+	var i int = 0
+	var ditemukan bool = false
+	for i < n {
+		if sumber[i].Kategori == kategori {
+			fmt.Printf("%s | Rp%.2f\n", sumber[i].Nama, sumber[i].Penghasilan)
+			fmt.Printf("Kategori ditemukan pada indeks %d\n", i)
+			ditemukan = true
+		}
+		i++
+	}
+	if !ditemukan {
+		fmt.Println("Kategori tidak ditemukan.")
+	}
+}
+
+func insertionSortKategori(ascending bool) {
+	var i int = 1
+	var j int
+	var key IncomeSource
+	for i < n {
+		key = sumber[i]
+		j = i - 1
+		for j >= 0 && ((ascending && sumber[j].Kategori > key.Kategori) || (!ascending && sumber[j].Kategori < key.Kategori)) {
+			sumber[j+1] = sumber[j]
+			j--
+		}
+		sumber[j+1] = key
+		i++
+	}
 }
 
 func binarySearch(kategori string) {
-    fmt.Println("👋 Keluar.")
-    return
+	insertionSortKategori(true)
+	var mid int
+	var ditemukan bool = false
+	var low, high int = 0, n - 1
+	for low <= high && !ditemukan {
+		mid = (low + high) / 2
+		if sumber[mid].Kategori == kategori {
+			ditemukan = true
+		} else {
+			if kategori < sumber[mid].Kategori {
+				high = mid - 1
+			} else {
+				low = mid + 1
+			}
+		}
+	}
+	if ditemukan {
+		fmt.Printf("%s ditemukan pada indeks %d\n", kategori, mid)
+		fmt.Println("Hasil Pencarian (Binary):")
+		fmt.Printf("%s | Rp%.2f\n", sumber[mid].Nama, sumber[mid].Penghasilan)
+	} else {
+		fmt.Println("Kategori tidak ditemukan (binary search).")
+	}
 }
 
-func selectionSortPenghasilan(){
-    
-}
-
-func insertionSortKategori(){
-    
+func selectionSortPenghasilan(ascending bool) {
+	var i int = 0
+	var minIdx int
+	var temp IncomeSource
+	var j int = i + 1
+	for i < n-1 {
+		minIdx = i
+		for j < n {
+			if (ascending && sumber[j].Penghasilan < sumber[minIdx].Penghasilan) || (!ascending && sumber[j].Penghasilan > sumber[minIdx].Penghasilan) {
+				minIdx = j
+			}
+			j++
+		}
+		temp = sumber[i]
+		sumber[i] = sumber[minIdx]
+		sumber[minIdx] = temp
+		i++
+	}
 }
 
 func menu() {
-    var pilihan int = -1
-    for {
-        fmt.Println("\n=== MENU ===")
-        fmt.Println("1. Tampilkan semua data")
-        fmt.Println("2. Tambah data")
-        fmt.Println("3. Ubah data")
-        fmt.Println("4. Hapus data")
-        fmt.Println("5. Laporan bulanan")
-        fmt.Println("6. Cari kategori (Sequential)")
-        fmt.Println("7. Cari kategori (Binary)")
-        fmt.Println("8. Urutkan berdasarkan penghasilan")
-        fmt.Println("9. Urutkan berdasarkan kategori")
-        fmt.Println("0. Keluar")
-        fmt.Print("Pilih menu: ")
-        fmt.Scanln(&pilihan)
-        switch pilihan {
-        case 1:
-            tampilkanData()
-        case 2:
-            tambahData()
-        case 3:
-            ubahData()
-        case 4:
-            hapusData()
-        case 5:
-            laporanBulanan()
-        case 6:
-            var kategori string
-            fmt.Print("Kategori yang dicari: ")
-            fmt.Scanln(&kategori)
-            sequentialSearch(kategori)
-        case 7:
-            var kategori string
-            fmt.Print("Kategori yang dicari: ")
-            fmt.Scanln(&kategori)
-            binarySearch(kategori)
-        case 8:
-            selectionSortPenghasilan()
-            tampilkanData()
-        case 9:
-            insertionSortKategori()
-            tampilkanData()
-        case 0:
-            fmt.Println("👋 Keluar.")
-            return
-        default:
-            fmt.Println("❌ Pilihan tidak valid.")
-        }
-    }
+	var pilihan int = -1
+	for pilihan != 0 {
+		// Menampilkan menu
+		fmt.Println("\n   Menu Aplikasi Manajemen Penghasilan")
+		fmt.Println("=========================================")
+		fmt.Println("1. Tampilkan semua data")
+		fmt.Println("2. Tambah data")
+		fmt.Println("3. Ubah data")
+		fmt.Println("4. Hapus data")
+		fmt.Println("5. Laporan bulanan")
+		fmt.Println("6. Cari kategori (Sequential)")
+		fmt.Println("7. Cari kategori (Binary)")
+		fmt.Println("8. Urutkan penghasilan (Asc/Desc)")
+		fmt.Println("9. Urutkan kategori (Asc/Desc)")
+		fmt.Println("10. Bersihkan layar")
+		fmt.Println("0. Keluar")
+		fmt.Println("=========================================")
+		fmt.Print("Pilihan: ")
+		fmt.Scanln(&pilihan)
+		if pilihan == 1 {
+			tampilkanData()
+		} else if pilihan == 2 {
+			tambahData()
+		} else if pilihan == 3 {
+			ubahData()
+		} else if pilihan == 4 {
+			hapusData()
+		} else if pilihan == 5 {
+			laporanBulanan()
+		} else if pilihan == 6 {
+			var kategori string
+			fmt.Print("Masukkan kategori: ")
+			tampilKategori()
+			fmt.Scanln(&kategori)
+			if kategoriValid(kategori) {
+				sequentialSearch(kategori)
+			} else {
+				fmt.Println("❌ Kategori tidak valid. Gunakan salah satu dari:")
+				tampilKategori()
+			}
+		} else if pilihan == 7 {
+			var kategori string
+			fmt.Print("Masukkan kategori: ")
+			tampilKategori()
+			fmt.Scanln(&kategori)
+			if kategoriValid(kategori) {
+				binarySearch(kategori)
+			} else {
+				fmt.Println("❌ Kategori tidak valid. Gunakan salah satu dari:")
+				tampilKategori()
+			}
+		} else if pilihan == 8 {
+			var mode string
+			fmt.Print("Urutkan Ascending (a) atau Descending (d): ")
+			fmt.Scanln(&mode)
+			selectionSortPenghasilan(mode == "a")
+			tampilkanData()
+		} else if pilihan == 9 {
+			var mode string
+			fmt.Print("Urutkan Ascending (a) atau Descending (d): ")
+			fmt.Scanln(&mode)
+			insertionSortKategori(mode == "a")
+			tampilkanData()
+		} else if pilihan == 0 {
+			fmt.Println("Terima kasih telah menggunakan aplikasi ini. Sampai jumpa!")
+			return
+		} else if pilihan == 10 {
+			ClearScreen()
+		} else {
+			fmt.Println("Pilihan tidak valid.")
+		}
+	}
 }
-func main(){
-    menu()
+
+func ClearScreen() {
+	fmt.Print("\033[H\033[2J")
 }
