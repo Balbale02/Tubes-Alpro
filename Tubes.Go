@@ -271,7 +271,7 @@ func menu() {
 			laporanBulanan()
 		} else if pilihan == 6 {
 			var kategori string
-			fmt.Print("Masukkan kategori: ")
+			fmt.Println("Masukkan kategori: ")
 			tampilKategori()
 			fmt.Scanln(&kategori)
 			if kategoriValid(kategori) {
@@ -282,7 +282,7 @@ func menu() {
 			}
 		} else if pilihan == 7 {
 			var kategori string
-			fmt.Print("Masukkan kategori: ")
+			fmt.Println("Masukkan kategori: ")
 			tampilKategori()
 			fmt.Scanln(&kategori)
 			if kategoriValid(kategori) {
