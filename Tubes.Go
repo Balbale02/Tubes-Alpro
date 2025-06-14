@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("\nSelamat datang di Aplikasi Manajemen Penghasilan	!")
+	fmt.Println("\nSelamat datang di Aplikasi  Pelacak Side Hustle dan Passive Income")
 	menu()
 }
 
@@ -20,7 +20,7 @@ var sumber [Maks]IncomeSource
 var n int // jumlah data
 
 var daftarKategori = []string{
-	"Pekerjaan Sampingan",
+	"Kerja Sampingan",
 	"Freelancing",
 	"Bisnis Digital",
 	"Investasi Pasif",
@@ -44,13 +44,13 @@ func kategoriValid(input string) bool {
 }
 
 func tampilkanData() {
+	var i int = 0
 	var laba float64
 	fmt.Println("\n================================= Daftar Penghasilan =================================")
-	var i int = 0
-	for i < n {
+	fmt.Printf("%-4s | %-20s | %-18s | %-15s | %-15s\n", "No", "Nama", "Kategori", "Penghasilan", "Laba")
+	for i = 0; i < n; i++ {
 		laba = sumber[i].Penghasilan - sumber[i].BiayaOperasional
-		fmt.Printf("[%d] %s \t | %s \t | Rp%.2f \t | Laba: Rp%.2f\t\n", i, sumber[i].Nama, sumber[i].Kategori, sumber[i].Penghasilan, laba)
-		i++
+		fmt.Printf("[%d]  | %-20s | %-18s | Rp%-13.2f | Rp%-13.2f\n", i, sumber[i].Nama, sumber[i].Kategori, sumber[i].Penghasilan, laba)
 	}
 	// Jika tidak ada data
 	if n == 0 {
@@ -92,13 +92,13 @@ func tambahData() {
 
 func ubahData() {
 	tampilkanData()
+	var nama string
+	var penghasilan, biaya float64
+	var pilih int
 	var index int
 	fmt.Print("Masukkan indeks data yang ingin diubah: ")
 	fmt.Scanln(&index)
 	if index >= 0 && index < n {
-		var nama string
-		var penghasilan, biaya float64
-		var pilih int
 		fmt.Print("Nama sumber baru: ")
 		fmt.Scanln(&nama)
 		fmt.Println("Pilih kategori baru:")
@@ -124,10 +124,11 @@ func ubahData() {
 func hapusData() {
 	tampilkanData()
 	var index int
+	var i int
 	fmt.Print("Masukkan indeks data yang ingin dihapus: ")
 	fmt.Scanln(&index)
 	if index >= 0 && index < n {
-		var i int = index
+		i = index
 		for i < n-1 {
 			sumber[i] = sumber[i+1]
 			i++
