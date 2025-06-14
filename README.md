@@ -1,4 +1,4 @@
-# Aplikasi Manajemen Penghasilan
+# Aplikasi  Pelacak Side Hustle dan Passive Income
 Aplikasi berbasis bahasa pemrograman Go (Golang) untuk mengelola berbagai sumber penghasilan yaitu : pekerjaan sampingan, freelancing, bisnis digital, atau investasi pasif, secara sederhana.
 Aplikasi ini memungkinkan pengguna untuk menambah, mengubah, menghapus, mencari, mengurutkan, dan menganalisis data penghasilan dari berbagai kategori.
 # Fitur
